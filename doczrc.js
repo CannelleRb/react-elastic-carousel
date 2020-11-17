@@ -25,6 +25,7 @@ export default {
         'enableAutoPlay',
         'itemPadding',
         'sidePadding',
+        'showEmptySlots',
         'itemPosition',
         'easing',
         'renderArrow',

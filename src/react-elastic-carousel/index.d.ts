@@ -55,6 +55,8 @@ export interface ReactElasticCarouselProps {
   initialFirstItem?: number;
   // Defaults to true
   showArrows?: boolean;
+  // Defaults to false
+  showEmptySlots?: boolean;
   // Defaults to true
   disableArrowsOnEnd?: boolean;
   // Defaults to boolean

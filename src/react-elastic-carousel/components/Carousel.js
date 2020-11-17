@@ -208,18 +208,21 @@ class Carousel extends React.Component {
     const {
       verticalMode,
       children,
-      itemsToShow
+      itemsToShow,
+      showEmptySlots
     } = this.getDerivedPropsFromBreakPoint();
     const { height: sliderHeight } = sliderNode.contentRect;
     const nextState = {};
     const childrenLength = Children.toArray(children).length;
     if (verticalMode) {
       const childHeight = sliderHeight / childrenLength;
-      // We use Math.min because don't want to make the child smaller
-      // if number of children is smaller than itemsToShow.
-      // Because we will have "empty slots"
+      // When "showEmptySlots" is false
+      // We use Math.min because we don't want to make the child smaller
+      // if the number of children is smaller than itemsToShow.
+      // (Because we do not want "empty slots")
       nextState.rootHeight =
-        childHeight * Math.min(childrenLength, itemsToShow);
+        childHeight *
+        (showEmptySlots ? itemsToShow : Math.min(childrenLength, itemsToShow));
       nextState.childHeight = childHeight;
     } else {
       nextState.rootHeight = sliderHeight;
@@ -241,6 +244,7 @@ class Carousel extends React.Component {
           onResize,
           verticalMode,
           itemsToShow,
+          showEmptySlots,
           children
         } = this.getDerivedPropsFromBreakPoint();
 
@@ -252,10 +256,15 @@ class Carousel extends React.Component {
         if (verticalMode) {
           childWidth = containerWidth;
         } else {
-          // We use Math.min because don't want to make the child smaller
-          // if number of children is smaller than itemsToShow.
-          // Because we will have "empty slots"
-          childWidth = containerWidth / Math.min(childrenLength, itemsToShow);
+          // When "showEmptySlots" is false
+          // We use Math.min because we don't want to make the child smaller
+          // if the number of children is smaller than itemsToShow.
+          // (Because we do not want "empty slots")
+          childWidth =
+            containerWidth /
+            (showEmptySlots
+              ? itemsToShow
+              : Math.min(childrenLength, itemsToShow));
         }
 
         this.setState(
@@ -786,6 +795,7 @@ Carousel.defaultProps = {
   initialFirstItem: 0,
   initialActiveIndex: 0,
   showArrows: true,
+  showEmptySlots: false,
   disableArrowsOnEnd: true,
   pagination: true,
   easing: "ease",
@@ -868,6 +878,9 @@ Carousel.propTypes = {
 
   /** Show the arrow buttons */
   showArrows: PropTypes.bool,
+
+  /** Show empty slots when children.length < itemsToShow */
+  showEmptySlots: PropTypes.bool,
 
   /** Disables the arrow button when there are no more items */
   disableArrowsOnEnd: PropTypes.bool,
